@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <title>Consulta de Nome</title>
+</head>
+<body>
+  <h2>Digite seu nome:</h2>
+  <input id="nome" type="text" />
+  <button onclick="buscarDados()">Buscar</button>
+
+  <div id="resultado"></div>
+
+  <script>
+    function buscarDados() {
+      const nome = document.getElementById("nome").value;
+      const resultado = document.getElementById("resultado");
+
+      resultado.innerHTML = "Buscando...";
+
+      fetch(`https://api.agify.io?name=${nome}`)
+        .then(r => r.json())
+        .then(d => {
+          resultado.innerHTML = `<p>Idade: ${d.age}</p>`;
+        });
+
+      fetch(`https://api.genderize.io?name=${nome}`)
+        .then(r => r.json())
+        .then(d => {
+          resultado.innerHTML += `<p>Gênero: ${d.gender}</p>`;
+        });
+
+      fetch(`https://api.nationalize.io?name=${nome}`)
+        .then(r => r.json())
+        .then(d => {
+          let paises = d.country.map(p => p.country_id).join(", ");
+          resultado.innerHTML += `<p>País(es): ${paises}</p>`;
+        });
+    }
+  </script>
+</body>
+</html>
